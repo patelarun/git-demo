@@ -5,20 +5,20 @@ export default class TodoList extends React.Component {
     return (
       <div>
         <ul>
-          {this.props.todos.map((todo, todoIndex) => (
-            <li>
+          {this.props.todos.map((todo) => (
+            <li key={todo.id}>
               <span>
                 {todo.title}: {todo.description}
               </span>
               <span>
-                <button onClick={() => this.props.handleDelete(todoIndex)}>Delete</button>
-                <button onClick={() => this.props.handleEdit(todoIndex)}>Edit</button>
+                <button onClick={() => this.props.handleDelete(todo.id)}>Delete</button>
+                <button onClick={() => this.props.handleEdit(todo.id)}>Edit</button>
                 <label>
                   complete
                   <input
                     type="checkbox"
                     checked={todo.completed}
-                    onClick={(event) => this.props.handleComplete(event, todoIndex)}
+                    onClick={(event) => this.props.handleComplete(event, todo.id)}
                   />
                 </label>
               </span>

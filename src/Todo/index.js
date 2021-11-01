@@ -26,7 +26,7 @@ export default class Todo extends React.Component {
     if (!todo.title) return;
     const todos = [...this.state.todos];
     if (!updatingTodoIndex && updatingTodoIndex !== 0) {
-      todos.push(todo);
+      todos.push({ ...todo, id: new Date().getTime() });
     } else {
       todos[updatingTodoIndex] = { ...todo };
     }
@@ -37,19 +37,20 @@ export default class Todo extends React.Component {
     });
   }
 
-  handleDelete = (todoIndex) => {
-    const newTodosArray = this.state.todos.filter((todo, currentTodoIndex) => currentTodoIndex !== todoIndex);
+  handleDelete = (todoId) => {
+    const newTodosArray = this.state.todos.filter((todo) => todo.id !== todoId);
     this.setState({ todos: newTodosArray });
   }
 
-  handleEdit = (todoIndex) => {
+  handleEdit = (todoId) => {
+    const todoIndex = this.state.todos.findIndex((todo) => todo.id === todoId);
     const todo = { ...this.state.todos[todoIndex] };
     this.setState({ todo, updatingTodoIndex: todoIndex });
   }
 
-  handleComplete = (event, todoIndex) => {
-    const newTodosArray = this.state.todos.map((todo, currentTodoIndex) => {
-      if (currentTodoIndex !== todoIndex) return todo;
+  handleComplete = (event, todoId) => {
+    const newTodosArray = this.state.todos.map((todo) => {
+      if (todo.id !== todoId) return todo;
       return { ...todo, completed: event.target.checked };
     });
     this.setState({ todos: newTodosArray });
