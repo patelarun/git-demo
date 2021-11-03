@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
 
-const NestedRoute = (props) => console.log(props) || <p>{props.match.params.id}</p>;
+const NestedRoute = (props) => console.log(props) || <p>{props.match.params.contactId}</p>;
 
 export default function NestedRouting () {
   return (
@@ -23,7 +23,7 @@ export default function NestedRouting () {
           <Link to="/nested-router/4">Contacts 4 </Link>
         </li>
       </ul>
-      <Route path="/nested-router/:id" component={NestedRoute} />
+      <Route path="/nested-router/:contactId" component={NestedRoute} />
     </div>
     </div>
   );
