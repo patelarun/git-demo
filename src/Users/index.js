@@ -30,7 +30,7 @@ export default class Users extends React.Component {
             </li>
           ))}
         </ul>
-        <User selectedUserId={this.state.selectedUserId} />
+        <User requestUsers={this.requestUsers} selectedUserId={this.state.selectedUserId} />
       </div>
     );
   }

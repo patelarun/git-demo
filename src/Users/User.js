@@ -14,17 +14,38 @@ export default function User (props) {
 
   }, [props.selectedUserId]);
 
+  const handleChangeName = (event) => {
+    const { name, value } = event.target;
+    const nextUser = { ...user, [name]: value };
+    setUser(nextUser);
+  };
+
+  const requestUpdateUser = async (user) => {
+    const response = await axios.put(`/users/${user.id}`, { ...user });
+    setUser(response.data);
+    props.requestUsers();
+  };
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    requestUpdateUser(user);
+  }
+
   if (!props.selectedUserId) return "No Data Display";
   if (props.selectedUserId && !user) return "Loading";
 
   return (
     <div>
+      <form onSubmit={handleSubmit}>
       <ul>
         <li>{user.id}</li>
-        <li>{user.name}</li>
+        <li><input name="name" value={user.name} onChange={handleChangeName} /></li>
         <li>{user.email}</li>
         <li>{user.phone}</li>
+        <li><button type="submit">Submit</button></li>
       </ul>
+      </form>
     </div>
   );
 }
