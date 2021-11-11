@@ -1,13 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { setUsers, setSelectedUserId } from '../actions';
 import axios from './axios';
 import User from './User';
 
-export default class Users extends React.Component {
-  state = { selectedUserId: null }
+class Users extends React.Component {
+  state = {}
 
   requestUsers = async () => {
     const response = await axios.get('/users');
-    this.setState({ users: response.data });
+    this.props.setUsers(response.data);
   }
 
   componentDidMount() {
@@ -15,23 +17,36 @@ export default class Users extends React.Component {
   }
 
   onClickUser = (userId) => {
-    this.setState({ selectedUserId: userId });
+    this.props.setSelectedUserId(userId);
   }
 
   render () {
-    if (!this.state.users) return "Loading";
+    const { records } = this.props.users;
 
     return (
       <div>
         <ul>
-          {this.state.users.map((user) => (
+          {records.map((user) => (
             <li key={user.id} onClick={() => this.onClickUser(user.id)}>
               {user.name}
             </li>
           ))}
         </ul>
-        <User requestUsers={this.requestUsers} selectedUserId={this.state.selectedUserId} />
+        <User requestUsers={this.requestUsers} />
       </div>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  users: state.users,
+});
+
+const mapDispatchToProps = {
+  setUsers,
+  setSelectedUserId,
+};
+
+const UsersConnectedWithRedux = connect(mapStateToProps, mapDispatchToProps)(Users);
+
+export default UsersConnectedWithRedux;

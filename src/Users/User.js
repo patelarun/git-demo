@@ -1,23 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from './axios';
+import { setUser } from '../actions';
 
 export default function User (props) {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users);
 
   useEffect(() => {
     const requestUser = async (userId) => {
       const response = await axios.get(`/users/${userId}`);
-      setUser(response.data);
+      const setUserAction = setUser(response.data);
+      dispatch(setUserAction);
     };
-    if (!props.selectedUserId) return;
-    requestUser(props.selectedUserId);
+    if (!users.selectedUserId) return;
+    requestUser(users.selectedUserId);
 
-  }, [props.selectedUserId]);
+  }, [users.selectedUserId, dispatch]);
 
   const handleChangeName = (event) => {
     const { name, value } = event.target;
-    const nextUser = { ...user, [name]: value };
-    setUser(nextUser);
+    const nextUser = { ...users.user, [name]: value };
+    dispatch(setUser(nextUser));
   };
 
   const requestUpdateUser = async (user) => {
@@ -29,20 +33,20 @@ export default function User (props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    requestUpdateUser(user);
+    requestUpdateUser(users.user);
   }
 
   if (!props.selectedUserId) return "No Data Display";
-  if (props.selectedUserId && !user) return "Loading";
+  if (props.selectedUserId && !users.user) return "Loading";
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
       <ul>
-        <li>{user.id}</li>
-        <li><input name="name" value={user.name} onChange={handleChangeName} /></li>
-        <li>{user.email}</li>
-        <li>{user.phone}</li>
+        <li>{users.user.id}</li>
+        <li><input name="name" value={users.user.name} onChange={handleChangeName} /></li>
+        <li>{users.user.email}</li>
+        <li>{users.user.phone}</li>
         <li><button type="submit">Submit</button></li>
       </ul>
       </form>
