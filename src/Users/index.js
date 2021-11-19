@@ -1,19 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setUsers, setSelectedUserId } from '../actions';
-import axios from './axios';
+import { requestUsers } from '../thunks/users';
 import User from './User';
 
 class Users extends React.Component {
   state = {}
 
-  requestUsers = async () => {
-    const response = await axios.get('/users');
-    this.props.setUsers(response.data);
-  }
-
   componentDidMount() {
-    this.requestUsers();
+    this.props.requestUsers();
   }
 
   onClickUser = (userId) => {
@@ -45,6 +40,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   setUsers,
   setSelectedUserId,
+  requestUsers,
 };
 
 const UsersConnectedWithRedux = connect(mapStateToProps, mapDispatchToProps)(Users);
