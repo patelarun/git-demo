@@ -1,5 +1,5 @@
 import './App.css';
-import Users from './Users';
+import Books from './Books';
 import Todo from './Todo';
 import Counter from './Counter';
 import NestedRouting from './NestedRouting';
@@ -15,7 +15,7 @@ function App(props) {
       <Link to="/counter">Counter</Link>
       <Link to="/nested-router">Nested Router</Link>
       <div className="App">
-        <Route exact path="/" component={Users} />
+        <Route exact path="/" component={Books} />
         <Route path="/todo" component={Todo} />
         <Route path="/counter" component={Counter} />
         <Route path="/nested-router" component={NestedRouting} />
