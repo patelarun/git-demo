@@ -5,7 +5,7 @@ const client = axios.create({
   baseURL: 'https://the-one-api.dev/v2',
 });
 
-client.defaults.headers.common['Authorization'] = 'Bearer JOm5bP8gzfPvH8uPHCQp';
+client.defaults.headers.common['Authorization'] = 'Bearer Bearer-token-here';
 
 export const requestBooks = () => async (dispatch) => {
   try {
