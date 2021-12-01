@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { setUser, setUsers } from '../actions';
+import { setUser, setUsers, setCharacterFields } from '../actions';
 
 const client = axios.create({
   baseURL: 'https://the-one-api.dev/v2',
 });
 
-client.defaults.headers.common['Authorization'] = 'Bearer add-token-here';
+client.defaults.headers.common['Authorization'] = 'Bearer JOm5bP8gzfPvH8uPHCQp';
 
 export const requestBooks = () => async (dispatch) => {
   try {
@@ -17,11 +17,11 @@ export const requestBooks = () => async (dispatch) => {
   }
 }
 
-export const requestMovies = () => async (dispatch) => {
+export const requestCharacters = (prevFilters) => async (dispatch) => {
   try {
-    const response = await client.get('/movie');
-    debugger;
-    dispatch(setUsers(response.data.docs));
+    const params = { limit: prevFilters.limit, page: prevFilters.page };
+    const { data: { docs, ...filters } } = await client.get('/character', { params });
+    dispatch(setCharacterFields({ records: docs, filters }));
   } catch (err) {
     // logs the error whatever error occured in try block
     console.log(err);

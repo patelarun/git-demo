@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setUsers, setSelectedUserId } from '../actions';
-import { requestMovies } from '../thunks/book';
+import { requestBooks } from '../thunks/book';
 import User from './User';
 
 class Users extends React.Component {
   state = {}
 
   componentDidMount() {
-    this.props.requestMovies();
+    this.props.requestBooks();
   }
 
   onClickUser = (userId) => {
@@ -40,7 +40,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   setUsers,
   setSelectedUserId,
-  requestMovies,
+  requestBooks,
 };
 
 const UsersConnectedWithRedux = connect(mapStateToProps, mapDispatchToProps)(Users);
