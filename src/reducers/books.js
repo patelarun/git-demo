@@ -1,9 +1,12 @@
-import { SET_CHARACTER_FIELDS } from '../actions';
+import {
+  SET_CHARACTER_FIELDS,
+  SET_CHARACTER_FILTERS,
+} from '../actions';
 
 const initialState = {
   characters: {
     records: [],
-    filters: { page: 1, limit: 10 },
+    filters: { page: 1, limit: 10, orderBy: 'name', order: 'asc' },
   },
 }
 
@@ -15,6 +18,17 @@ export default function books (state = initialState, action) {
         characters: {
           ...state.characters,
           ...action.payload,
+        },
+      };
+    case SET_CHARACTER_FILTERS:
+      return {
+        ...state,
+        characters: {
+          ...state.characters,
+          filters: {
+            ...state.characters.filters,
+            ...action.payload,
+          }
         },
       };
     default:

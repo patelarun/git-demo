@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setUser, setUsers, setCharacterFields } from '../actions';
+import { setUser, setUsers, setCharacterFields, setCharacterFilters } from '../actions';
 
 const client = axios.create({
   baseURL: 'https://the-one-api.dev/v2',
@@ -19,9 +19,14 @@ export const requestBooks = () => async (dispatch) => {
 
 export const requestCharacters = (prevFilters) => async (dispatch) => {
   try {
-    const params = { limit: prevFilters.limit, page: prevFilters.page };
+    const params = {
+      limit: prevFilters.limit,
+      page: prevFilters.page,
+      sort: `${prevFilters.orderBy}:${prevFilters.order}`,
+    };
     const { data: { docs, ...filters } } = await client.get('/character', { params });
-    dispatch(setCharacterFields({ records: docs, filters }));
+    dispatch(setCharacterFields({ records: docs }));
+    dispatch(setCharacterFilters(filters));
   } catch (err) {
     // logs the error whatever error occured in try block
     console.log(err);

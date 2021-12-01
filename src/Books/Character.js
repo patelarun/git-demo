@@ -1,39 +1,46 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { requestCharacters } from '../thunks/book';
-import { setCharacterFields } from '../actions';
+import { setCharacterFilters } from '../actions';
 
 export default function Characters (props) {
   const dispatch = useDispatch();
   const { records, filters } = useSelector((state) => state.books.characters);
 
-  const getRecords = () => {
-    dispatch(requestCharacters(filters));
-  };
-
-  const handleChangeLimit = (event) => {
-    const { value } = event.target;
-    const nextFilters = { ...filters, limit: value };
-    dispatch(setCharacterFields({ filters: nextFilters }));
+  const handleChangeFilter = (event) => {
+    const { value, name } = event.target;
+    dispatch(setCharacterFilters({ [name]: value }));
   };
 
   const handlePageChange = (acc) => {
-    const nextFilters = { ...filters, page: acc + filters.page };
-    dispatch(setCharacterFields({ filters: nextFilters }));
+    dispatch(setCharacterFilters({ page: acc + filters.page }));
   };
 
   useEffect(() => {
+    const getRecords = () => {
+      dispatch(requestCharacters(filters));
+    };
+
     getRecords();
-  }, [filters.limit, filters.page]);
+  }, [filters.limit, filters.page, filters.orderBy, filters.order]);
 
   return (
     <div>
+      <select name="orderBy" value={filters.orderBy} onChange={handleChangeFilter}>
+        <option value="name">name</option>
+        <option value="race">race</option>
+        <option value="height">height</option>
+      </select>
+      <select name="order" value={filters.order} onChange={handleChangeFilter}>
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
       <ul>
         {records.map((record) => (
           <li>{record.name}</li>
         ))}
       </ul>
-      <select value={filters.limit} onChange={handleChangeLimit}>
+      <select name="limit" value={filters.limit} onChange={handleChangeFilter}>
         <option value={5}>5</option>
         <option value={10}>10</option>
         <option value={15}>15</option>
